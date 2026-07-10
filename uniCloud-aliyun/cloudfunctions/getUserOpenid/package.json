@@ -1,0 +1,24 @@
+{
+  "name": "getuseropenid",
+  "extensions": {
+    "uni-cloud-jql": {}
+  },
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "ws": "^8.21.0",
+    "wx-server-sdk": "^4.0.2"
+  },
+  "cloudfunction-config": {
+      "runtime": "Nodejs18",
+      "timeout": 10
+    }
+}

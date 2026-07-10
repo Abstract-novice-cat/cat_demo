@@ -1,0 +1,32 @@
+{
+	"bsonType": "object",
+	"description": "菜品表",
+	"required": [],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "自动主键"
+		},
+		"name": {
+			"bsonType": "string",
+			"description": "菜品名称"
+		},
+		"desc": {
+			"bsonType": "string",
+			"description": "菜品备注/描述"
+		},
+		"img": {
+			"bsonType": "string",
+			"description": "菜品图片地址"
+		},
+		"price": {
+			"bsonType": "number",
+			"description": "菜品价格"
+		}
+	}
+}

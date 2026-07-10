@@ -1,0 +1,32 @@
+{
+	"bsonType": "object",
+	"description": "用户表",
+	"required": [],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "主键ID"
+		},
+		"openid": {
+			"bsonType": "string",
+			"description": "用户微信唯一标识"
+		},
+		"nickName": {
+			"bsonType": "string",
+			"description": "用户昵称"
+		},
+		"avatarUrl": {
+			"bsonType": "string",
+			"description": "用户头像"
+		},
+		"createTime": {
+			"bsonType": "date",
+			"description": "创建时间"
+		}
+	}
+}

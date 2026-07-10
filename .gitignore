@@ -1,0 +1,44 @@
+# dependencies
+node_modules/
+**/node_modules/
+
+# build / package output
+unpackage/
+dist/
+build/
+
+# IDE and OS files
+.hbuilderx/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# environment / secrets
+.env
+.env.*
+*.local
+*.key
+*.pem
+*.crt
+*.p12
+*.jks
+
+# coverage
+coverage/
+
+# uniCloud cloudfunctions local deps / lockfiles (don't commit large node_modules or generated lockfiles inside cloudfunctions)
+uniCloud-aliyun/cloudfunctions/**/node_modules/
+uniCloud-aliyun/cloudfunctions/**/package-lock.json
+
+# temporary / cache
+.cache/
+
+# other
+unpackage/
