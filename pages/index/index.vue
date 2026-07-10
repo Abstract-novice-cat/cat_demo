@@ -1,159 +1,184 @@
 <template>
-	<view class="page-wrap">
-		<view class="top">
-			<text>家庭点餐菜单</text>
-		    <button v-if="isAdmin" @tap="goAdmin">订单/餐品管理</button>
-	    </view>
-		<view class="quick-actions">
-			<button size="mini" @tap="goCart">购物车</button>
-			<button size="mini" @tap="goProfile">个人主页</button>
-		</view>
-	    <view class="food-list">
-		    <view v-for="(item,index) in foodList" :key="index" class="food-item">
-			    <image :src="item.img" mode="aspectFill"></image>
-			    <view class="food-info">
-				    <text> {{ item.name}}</text>
-				    <text>备注：{{ item.desc}}</text>
-			    </view>
-			    <view class="food-btn">
-				    <button @tap="addCart(index)">+加入购物车</button>
-			    </view>
-		    </view>
-	    </view>
-	    <view class="cart">
-		    <text>已选菜品： {{ cartTotalNum}}件 </text>
-		    <button @tap="goCart">去购物车</button>
-	     </view>
-		 <button style="margin:20rpx 0;background:#f44336;color:#fff;" @click="logout">退出登录</button>
-	</view>
-	
+  <view class="container">
+    <view class="sidebar">
+      <view class="logo">点餐</view>
+      <button class="nav-btn" @tap="goAdmin" v-if="isAdmin">管理</button>
+      <button class="nav-btn" @tap="filterAll">所有菜品</button>
+      <button class="nav-btn" @tap="filterCategory('热菜')">热菜</button>
+      <button class="nav-btn" @tap="filterCategory('凉菜')">凉菜</button>
+      <view style="flex:1"></view>
+      <button class="bottom-btn" @tap="goProfile">个人主页</button>
+      <button class="bottom-btn" @tap="goCart">购物车 ({{ cartTotalNum }})</button>
+    </view>
+
+    <view class="main">
+      <view class="food-grid">
+        <view v-for="(item, index) in displayedFoods" :key="item._id || index" class="card">
+          <image :src="item.img || 'https://via.placeholder.com/240'" mode="aspectFill" class="food-image"></image>
+          <view class="card-body">
+            <text class="name">{{ item.name }}</text>
+            <text class="desc">{{ item.desc }}</text>
+            <view class="meta">
+              <text class="price">¥{{ item.price }}</text>
+              <button @tap="addCartById(item._id)" :disabled="item.isDelete">{{ item.isDelete ? '已下架' : '+ 加入' }}</button>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
 </template>
 
 <script>
-	export default {
-	  data() {
-	    return {
-	      adminOpenid: "", // 不再硬编码code
-	      isAdmin: false,
-	      foodList: [],
-	      cartList: [],
-	      cartTotalNum: 0,
-	      cartTotalPrice: 0
-	    }
-	  },
-	  onLoad() {
-	    // 1. 获取本地存储的真实openid
-	    const openid = uni.getStorageSync("openid")
-	    // 先加载菜品，不要一进来就强制跳转，避免闪退
-	    this.getFoodList()
-	    this.getCartStorage()
-	
-	    // 没有openid再跳转登录（延后执行，页面先渲染）
-	    /*if (!openid) {
-	      setTimeout(() => {
-	        uni.reLaunch({ url: "/pages/login/login" })
-	      }, 800)
-	      return
-	    }
-		*/
-	
-	    // ========== 这里填你云函数打印出来的 o开头真实openid ==========
-	    this.adminOpenid = "opDMSxk5VfRYJVyqjmuH3eoCLL-A"
-	    if (openid === this.adminOpenid) {
-	      this.isAdmin = true
-	    }
-	  },
-	  onShow() {
-	    this.getCartStorage()
-	  },
-	  methods: {
-	    async getFoodList() {
-	      const db = uniCloud.database()
-	      let res = await db.collection("foods").get()
-	      this.foodList = res.data
-	    },
-	    addCart(index) {
-	      let food = this.foodList[index]
-	      let existIndex = this.cartList.findIndex(item => item._id === food._id)
-	      if (existIndex > -1) {
-	        this.cartList[existIndex].num += 1
-	      } else {
-	        this.cartList.push({
-	          _id: food._id,
-	          name: food.name,
-	          price: food.price,
-	          img: food.img,
-	          num: 1
-	        })
-	      }
-	      uni.setStorageSync("cartList", this.cartList)
-	      this.calcCart()
-	    },
-	    calcCart() {
-	      let num = 0
-	      let price = 0
-	      this.cartList.forEach(item => {
-	        num += item.num
-	        price += item.num * item.price
-	      })
-	      this.cartTotalNum = num
-	      this.cartTotalPrice = price
-	    },
-	    getCartStorage() {
-	      let cart = uni.getStorageSync("cartList") || []
-	      this.cartList = cart
-	      this.calcCart()
-	    },
-	    goCart() {
-	      uni.navigateTo({
-	        url: "/pages/cart/cart"
-	      })
-	    },
-	    goProfile() {
-	      uni.navigateTo({
-	        url: "/pages/profile/profile"
-	      })
-	    },
-	    goAdmin() {
-	      uni.navigateTo({
-	        url: "/pages/admin/admin"
-	      })
-	    },
-		logout() {
-		      // 删除本地登录凭证openid
-		      uni.removeStorageSync("openid")
-		      // 强制重启页面跳回登录页
-		      uni.reLaunch({
-		        url: "/pages/login/login"
-		      })
-		    }
-	  }
-	}
+export default {
+  data() {
+    return {
+      adminOpenid: '',
+      isAdmin: false,
+      foodList: [],
+      displayedFoods: [],
+      cartList: [],
+      cartTotalNum: 0,
+      cartTotalPrice: 0,
+      activeCategory: '所有'
+    }
+  },
+  onLoad() {
+    const openid = uni.getStorageSync('openid')
+    this.adminOpenid = 'opDMSxk5VfRYJVyqjmuH3eoCLL-A'
+    if (openid === this.adminOpenid) this.isAdmin = true
+
+    this.getFoodList()
+    this.getCartStorage()
+  },
+  onShow() {
+    this.getCartStorage()
+  },
+  methods: {
+    async getFoodList() {
+      const db = uniCloud.database()
+      let res = await db.collection('foods').orderBy('createTime', 'desc').get()
+      this.foodList = res.data || []
+      this.applyFilter()
+    },
+    applyFilter() {
+      if (!this.activeCategory || this.activeCategory === '所有') {
+        this.displayedFoods = this.foodList
+      } else {
+        this.displayedFoods = this.foodList.filter(f => f.category === this.activeCategory)
+      }
+    },
+    filterAll() {
+      this.activeCategory = '所有'
+      this.applyFilter()
+    },
+    filterCategory(c) {
+      this.activeCategory = c
+      this.applyFilter()
+    },
+    addCartById(id) {
+      const index = this.foodList.findIndex(f => f._id === id)
+      if (index === -1) return
+      const food = this.foodList[index]
+      if (food.isDelete) {
+        uni.showToast({ title: '该菜已下架', icon: 'none' })
+        return
+      }
+      let existIndex = this.cartList.findIndex(item => item._id === food._id)
+      if (existIndex > -1) {
+        this.cartList[existIndex].num += 1
+      } else {
+        this.cartList.push({ _id: food._id, name: food.name, price: food.price, img: food.img, num: 1 })
+      }
+      uni.setStorageSync('cartList', this.cartList)
+      this.calcCart()
+      uni.showToast({ title: '已加入购物车', icon: 'success' })
+    },
+    calcCart() {
+      let num = 0
+      let price = 0
+      this.cartList.forEach(item => { num += item.num; price += item.num * item.price })
+      this.cartTotalNum = num
+      this.cartTotalPrice = price
+    },
+    getCartStorage() {
+      let cart = uni.getStorageSync('cartList') || []
+      this.cartList = cart
+      this.calcCart()
+    },
+    goCart() { uni.navigateTo({ url: '/pages/cart/cart' }) },
+    goProfile() { uni.navigateTo({ url: '/pages/profile/profile' }) },
+    goAdmin() { uni.navigateTo({ url: '/pages/admin/admin' }) }
+  }
+}
 </script>
 
 <style>
-.page-wrap {
-  padding: 16px;
+.container {
+  display: flex;
+  height: 100vh;
 }
-.top {
+.sidebar {
+  width: 110px;
+  background: #fff;
+  border-right: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+}
+.logo {
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+.nav-btn {
+  margin-bottom: 8px;
+}
+.bottom-btn {
+  margin-top: 8px;
+  background: #f5f5f5;
+}
+.main {
+  flex: 1;
+  padding: 12px;
+  overflow: auto;
+  background: #f7f7f7;
+}
+.food-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.card {
+  width: calc((100% - 48px) / 3);
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.food-image {
+  width: 100%;
+  height: 140px;
+}
+.card-body {
+  padding: 8px;
+}
+.name {
+  font-weight: bold;
+}
+.desc {
+  color: #666;
+  font-size: 12px;
+  margin-top: 4px;
+}
+.meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-top: 8px;
 }
-.quick-actions {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
+.price {
+  color: #f44336;
 }
-.food-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.food-item {
-  background: #fff;
-  border-radius: 12px;
-  padding: 10px;
+@media (max-width: 600px) {
+  .card { width: calc((100% - 24px) / 2); }
 }
 </style>
