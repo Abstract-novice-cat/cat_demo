@@ -19,10 +19,10 @@
       <view class="banner-wrap">
         <swiper class="banner" indicator-dots autoplay circular>
           <swiper-item>
-            <image src="/static/001.png" mode="aspectFill" class="banner-image"></image>
+            <image src="/static/003.png" mode="aspectFill" class="banner-image"></image>
           </swiper-item>
           <swiper-item>
-            <image src="/static/002.png" mode="aspectFill" class="banner-image"></image>
+            <image src="/static/004.png" mode="aspectFill" class="banner-image"></image>
           </swiper-item>
         </swiper>
       </view>
