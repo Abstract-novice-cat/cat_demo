@@ -16,6 +16,17 @@
     </view>
 
     <view class="main">
+      <view class="banner-wrap">
+        <swiper class="banner" indicator-dots autoplay circular>
+          <swiper-item>
+            <image src="/static/001.png" mode="aspectFill" class="banner-image"></image>
+          </swiper-item>
+          <swiper-item>
+            <image src="/static/002.png" mode="aspectFill" class="banner-image"></image>
+          </swiper-item>
+        </swiper>
+      </view>
+
       <view class="food-grid">
         <view v-for="(item, index) in displayedFoods" :key="item._id || index" class="card">
           <image :src="item.img || 'https://via.placeholder.com/240'" mode="aspectFill" class="food-image"></image>
@@ -364,6 +375,18 @@ export default {
 .container {
   display: flex;
   height: 100vh;
+}
+.banner-wrap {
+  margin-bottom: 12px;
+}
+.banner {
+  height: 180px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.banner-image {
+  width: 100%;
+  height: 100%;
 }
 .sidebar {
   width: 110px;
