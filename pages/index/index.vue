@@ -6,6 +6,7 @@
       <button class="nav-btn" @tap="filterAll">所有菜品</button>
       <button class="nav-btn" @tap="filterCategory('素菜')">素菜</button>
       <button class="nav-btn" @tap="filterCategory('荤菜')">荤菜</button>
+      <button class="nav-btn" @tap="filterCategory('主食')">主食</button>
       <button class="nav-btn" @tap="filterCategory('粥类')">粥类</button>
       <button class="nav-btn" @tap="filterCategory('饮品')">饮品</button>
       <button class="nav-btn" @tap="filterCategory('汤类')">汤类</button>
@@ -115,6 +116,38 @@ export default {
           name: '紫菜蛋花汤',
           desc: '鲜香滑嫩，轻盈暖心',
           category: '汤类',
+          img: '/static/logo.png',
+          isDelete: false
+        },
+        {
+          _id: 'demo-11',
+          name: '鲜肉包子',
+          desc: '皮薄多汁，鲜香饱满',
+          category: '主食',
+          img: '/static/logo.png',
+          isDelete: false
+        },
+        {
+          _id: 'demo-12',
+          name: '白馒头',
+          desc: '松软绵密，家庭常见主食',
+          category: '主食',
+          img: '/static/logo.png',
+          isDelete: false
+        },
+        {
+          _id: 'demo-13',
+          name: '米饭',
+          desc: '颗粒饱满，搭配任意菜品',
+          category: '主食',
+          img: '/static/logo.png',
+          isDelete: false
+        },
+        {
+          _id: 'demo-14',
+          name: '香煎大饼',
+          desc: '外脆里软，香气扑鼻',
+          category: '主食',
           img: '/static/logo.png',
           isDelete: false
         }
