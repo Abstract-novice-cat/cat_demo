@@ -383,10 +383,12 @@ export default {
   height: 180px;
   border-radius: 12px;
   overflow: hidden;
+  background: #f8f8f8;
 }
 .banner-image {
   width: 100%;
   height: 100%;
+  object-fit: contain;
 }
 .sidebar {
   width: 110px;
