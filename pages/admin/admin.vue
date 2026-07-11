@@ -20,9 +20,6 @@
       <view class="form-row">
         <input v-model="foodImg" placeholder="图片链接" />
       </view>
-      <view class="form-row">
-        <input v-model="foodPrice" type="digit" placeholder="价格" />
-      </view>
       <button class="primary-btn" @click="addFood">上架菜品</button>
     </view>
 
@@ -52,7 +49,6 @@ export default {
       foodName: '',
       foodDesc: '',
       foodImg: '',
-      foodPrice: '',
       foodList: []
     }
   },
@@ -68,7 +64,7 @@ export default {
       this.foodList = res.data || []
     },
     async addFood() {
-      if (!this.foodName || !this.foodDesc || !this.foodPrice) {
+      if (!this.foodName || !this.foodDesc) {
         uni.showToast({ title: '请完整填写菜品信息', icon: 'none' })
         return
       }
@@ -78,7 +74,7 @@ export default {
         name: this.foodName,
         desc: this.foodDesc,
         img: this.foodImg || 'https://via.placeholder.com/200',
-        price: Number(this.foodPrice),
+        price: 0,
         isDelete: false,
         createTime: Date.now()
       })
@@ -86,7 +82,6 @@ export default {
       this.foodName = ''
       this.foodDesc = ''
       this.foodImg = ''
-      this.foodPrice = ''
       uni.showToast({ title: '菜品已上架', icon: 'success' })
       this.loadFoods()
     },

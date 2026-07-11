@@ -19,7 +19,6 @@
             <text class="name">{{ item.name }}</text>
             <text class="desc">{{ item.desc }}</text>
             <view class="meta">
-              <text class="price">¥{{ item.price }}</text>
               <button @tap="addCartById(item._id)" :disabled="item.isDelete">{{ item.isDelete ? '已下架' : '+ 加入' }}</button>
             </view>
           </view>
@@ -209,9 +208,6 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-top: 8px;
-}
-.price {
-  color: #f44336;
 }
 @media (max-width: 600px) {
   .card { width: calc((100% - 24px) / 2); }
