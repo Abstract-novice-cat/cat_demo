@@ -42,6 +42,8 @@
 </template>
 
 <script>
+import { getStoredFoodList, saveFoodList } from '../../common/food-data.js'
+
 export default {
   data() {
     return {
@@ -58,25 +60,25 @@ export default {
     this.loadFoods()
   },
   methods: {
-    async loadFoods() {
-      const db = uniCloud.database()
-      const res = await db.collection('foods').orderBy('createTime', 'desc').get()
-      this.foodList = res.data || []
+    loadFoods() {
+      this.foodList = getStoredFoodList()
     },
-    async addFood() {
+    addFood() {
       if (!this.foodName || !this.foodDesc) {
         uni.showToast({ title: '请完整填写菜品信息', icon: 'none' })
         return
       }
 
-      const db = uniCloud.database()
-      await db.collection('foods').add({
+      const newFood = {
+        _id: `custom-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
         name: this.foodName,
         desc: this.foodDesc,
+        category: '素菜',
         img: this.foodImg || 'https://via.placeholder.com/200',
-        isDelete: false,
-        createTime: Date.now()
-      })
+        isDelete: false
+      }
+      this.foodList.unshift(newFood)
+      saveFoodList(this.foodList)
 
       this.foodName = ''
       this.foodDesc = ''
@@ -84,11 +86,12 @@ export default {
       uni.showToast({ title: '菜品已上架', icon: 'success' })
       this.loadFoods()
     },
-    async toggleFood(item) {
-      const db = uniCloud.database()
-      await db.collection('foods').doc(item._id).update({
-        isDelete: !item.isDelete
-      })
+    toggleFood(item) {
+      const index = this.foodList.findIndex(food => food._id === item._id)
+      if (index === -1) return
+
+      this.foodList[index].isDelete = !this.foodList[index].isDelete
+      saveFoodList(this.foodList)
       uni.showToast({ title: item.isDelete ? '菜品已恢复' : '菜品已下架', icon: 'success' })
       this.loadFoods()
     },
