@@ -380,8 +380,8 @@ export default {
   margin-bottom: 12px;
 }
 .banner {
-  height: 180px;
-  border-radius: 12px;
+  height: 240px;
+  border-radius: 16px;
   overflow: hidden;
   background: #f8f8f8;
 }
@@ -419,16 +419,22 @@ export default {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+  align-items: stretch;
 }
 .card {
-  width: calc((100% - 48px) / 3);
+  flex: 1 1 calc((100% - 48px) / 3);
+  min-width: 180px;
+  max-width: calc((100% - 48px) / 3);
   background: #fff;
   border-radius: 8px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 .food-image {
   width: 100%;
-  height: 140px;
+  height: 150px;
+  object-fit: cover;
 }
 .card-body {
   padding: 8px;
@@ -447,7 +453,19 @@ export default {
   align-items: center;
   margin-top: 8px;
 }
+@media (max-width: 900px) {
+  .card {
+    flex: 1 1 calc((100% - 24px) / 2);
+    max-width: calc((100% - 24px) / 2);
+    min-width: 160px;
+  }
+}
+
 @media (max-width: 600px) {
-  .card { width: calc((100% - 24px) / 2); }
+  .card {
+    flex: 1 1 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
 }
 </style>
