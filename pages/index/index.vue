@@ -35,7 +35,44 @@ export default {
     return {
       adminOpenid: '',
       isAdmin: false,
-      foodList: [],
+      foodList: [
+        {
+          _id: 'demo-1',
+          name: '红烧肉',
+          desc: '香浓酥烂，经典招牌',
+          price: 28,
+          category: '热菜',
+          img: '/static/logo.png',
+          isDelete: false
+        },
+        {
+          _id: 'demo-2',
+          name: '清蒸鱼',
+          desc: '鲜嫩可口，清淡不腻',
+          price: 32,
+          category: '热菜',
+          img: '/static/logo.png',
+          isDelete: false
+        },
+        {
+          _id: 'demo-3',
+          name: '凉拌黄瓜',
+          desc: '清爽下饭，酸甜开胃',
+          price: 12,
+          category: '凉菜',
+          img: '/static/logo.png',
+          isDelete: false
+        },
+        {
+          _id: 'demo-4',
+          name: '拍黄瓜',
+          desc: '爽口微辣，适合搭配',
+          price: 15,
+          category: '凉菜',
+          img: '/static/logo.png',
+          isDelete: false
+        }
+      ],
       displayedFoods: [],
       cartList: [],
       cartTotalNum: 0,
@@ -48,7 +85,7 @@ export default {
     this.adminOpenid = 'opDMSxk5VfRYJVyqjmuH3eoCLL-A'
     if (openid === this.adminOpenid) this.isAdmin = true
 
-    this.getFoodList()
+    this.applyFilter()
     this.getCartStorage()
   },
   onShow() {
@@ -56,9 +93,7 @@ export default {
   },
   methods: {
     async getFoodList() {
-      const db = uniCloud.database()
-      let res = await db.collection('foods').orderBy('createTime', 'desc').get()
-      this.foodList = res.data || []
+      // 现在直接使用前端内置示例菜品，不再调用云端数据库。
       this.applyFilter()
     },
     applyFilter() {
