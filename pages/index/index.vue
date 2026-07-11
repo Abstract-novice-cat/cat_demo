@@ -4,8 +4,11 @@
       <view class="logo">点餐</view>
       <button class="nav-btn" @tap="goAdmin" v-if="isAdmin">管理</button>
       <button class="nav-btn" @tap="filterAll">所有菜品</button>
-      <button class="nav-btn" @tap="filterCategory('热菜')">热菜</button>
-      <button class="nav-btn" @tap="filterCategory('凉菜')">凉菜</button>
+      <button class="nav-btn" @tap="filterCategory('素菜')">素菜</button>
+      <button class="nav-btn" @tap="filterCategory('荤菜')">荤菜</button>
+      <button class="nav-btn" @tap="filterCategory('粥类')">粥类</button>
+      <button class="nav-btn" @tap="filterCategory('饮品')">饮品</button>
+      <button class="nav-btn" @tap="filterCategory('汤类')">汤类</button>
       <view style="flex:1"></view>
       <button class="bottom-btn" @tap="goProfile">个人主页</button>
       <button class="bottom-btn" @tap="goCart">购物车 ({{ cartTotalNum }})</button>
@@ -37,37 +40,81 @@ export default {
       foodList: [
         {
           _id: 'demo-1',
-          name: '红烧肉',
-          desc: '香浓酥烂，经典招牌',
-          price: 28,
-          category: '热菜',
+          name: '麻婆豆腐',
+          desc: '豆腐滑嫩，麻香入味',
+          category: '素菜',
           img: '/static/logo.png',
           isDelete: false
         },
         {
           _id: 'demo-2',
-          name: '清蒸鱼',
-          desc: '鲜嫩可口，清淡不腻',
-          price: 32,
-          category: '热菜',
+          name: '蒜蓉西兰花',
+          desc: '清脆爽口，蒜香浓郁',
+          category: '素菜',
           img: '/static/logo.png',
           isDelete: false
         },
         {
           _id: 'demo-3',
-          name: '凉拌黄瓜',
-          desc: '清爽下饭，酸甜开胃',
-          price: 12,
-          category: '凉菜',
+          name: '宫保鸡丁',
+          desc: '鸡丁香辣，花生脆口',
+          category: '荤菜',
           img: '/static/logo.png',
           isDelete: false
         },
         {
           _id: 'demo-4',
-          name: '拍黄瓜',
-          desc: '爽口微辣，适合搭配',
-          price: 15,
-          category: '凉菜',
+          name: '红烧牛腩',
+          desc: '牛腩酥烂，酱汁浓郁',
+          category: '荤菜',
+          img: '/static/logo.png',
+          isDelete: false
+        },
+        {
+          _id: 'demo-5',
+          name: '皮蛋瘦肉粥',
+          desc: '口感绵软，暖胃爽滑',
+          category: '粥类',
+          img: '/static/logo.png',
+          isDelete: false
+        },
+        {
+          _id: 'demo-6',
+          name: '红枣桂圆粥',
+          desc: '甜润滋补，养胃暖身',
+          category: '粥类',
+          img: '/static/logo.png',
+          isDelete: false
+        },
+        {
+          _id: 'demo-7',
+          name: '冰镇绿茶',
+          desc: '清爽解渴，香气宜人',
+          category: '饮品',
+          img: '/static/logo.png',
+          isDelete: false
+        },
+        {
+          _id: 'demo-8',
+          name: '鲜榨橙汁',
+          desc: '清甜酸爽，活力十足',
+          category: '饮品',
+          img: '/static/logo.png',
+          isDelete: false
+        },
+        {
+          _id: 'demo-9',
+          name: '西红柿鸡蛋汤',
+          desc: '酸甜开胃，营养丰富',
+          category: '汤类',
+          img: '/static/logo.png',
+          isDelete: false
+        },
+        {
+          _id: 'demo-10',
+          name: '紫菜蛋花汤',
+          desc: '鲜香滑嫩，轻盈暖心',
+          category: '汤类',
           img: '/static/logo.png',
           isDelete: false
         }
@@ -75,7 +122,6 @@ export default {
       displayedFoods: [],
       cartList: [],
       cartTotalNum: 0,
-      cartTotalPrice: 0,
       activeCategory: '所有'
     }
   },
@@ -122,7 +168,7 @@ export default {
       if (existIndex > -1) {
         this.cartList[existIndex].num += 1
       } else {
-        this.cartList.push({ _id: food._id, name: food.name, price: food.price, img: food.img, num: 1 })
+        this.cartList.push({ _id: food._id, name: food.name, img: food.img, num: 1 })
       }
       uni.setStorageSync('cartList', this.cartList)
       this.calcCart()
@@ -130,10 +176,8 @@ export default {
     },
     calcCart() {
       let num = 0
-      let price = 0
-      this.cartList.forEach(item => { num += item.num; price += item.num * item.price })
+      this.cartList.forEach(item => { num += item.num })
       this.cartTotalNum = num
-      this.cartTotalPrice = price
     },
     getCartStorage() {
       let cart = uni.getStorageSync('cartList') || []

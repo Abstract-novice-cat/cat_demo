@@ -74,7 +74,6 @@ export default {
         name: this.foodName,
         desc: this.foodDesc,
         img: this.foodImg || 'https://via.placeholder.com/200',
-        price: 0,
         isDelete: false,
         createTime: Date.now()
       })
