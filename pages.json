@@ -23,12 +23,19 @@
 			"style": {
 				"navigationBarTitleText": "个人主页"
 			}
-		},
+		}
+	],
+	"subPackages": [
 		{
-			"path": "pages/admin/admin",
-			"style": {
-				"navigationBarTitleText": "管理员模块"
-			}
+			"root": "pages/admin",
+			"pages": [
+				{
+					"path": "admin",
+					"style": {
+						"navigationBarTitleText": "管理员模块"
+					}
+				}
+			]
 		}
 	],
 	"globalStyle": {
