@@ -19,10 +19,10 @@
       <view class="banner-wrap">
         <swiper class="banner" indicator-dots autoplay circular>
           <swiper-item>
-            <image src="/static/003.png" mode="aspectFill" class="banner-image"></image>
+            <image src="/static/003.jpg" mode="aspectFill" class="banner-image"></image>
           </swiper-item>
           <swiper-item>
-            <image src="/static/004.png" mode="aspectFill" class="banner-image"></image>
+            <image src="/static/004.jpg" mode="aspectFill" class="banner-image"></image>
           </swiper-item>
         </swiper>
       </view>
@@ -304,6 +304,12 @@ export default {
   .logo {
     font-size: 16px;
     padding: 8px 0;
+  }
+  .food-image{
+    object-fit:contain;
+    background:#f8f8f8;
+    aspect-ratio: unset ！important;
+    height: auto;
   }
 }
 </style>
